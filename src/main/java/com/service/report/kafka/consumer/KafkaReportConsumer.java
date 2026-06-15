@@ -16,7 +16,7 @@ public class KafkaReportConsumer {
     private final AuctionReportService auctionReportService;
     private final MessageReportService messageReportService;
 
-    @KafkaListener(topics = "reviews.report.auction.approved")
+    @KafkaListener(topics = "reviews.report.auction-approved")
     public void consumeAuctionReportApproved(AuctionReportApproved event) {
         log.info("Evento AuctionReportApproved recebido do Kafka. auctionId={}",
                 event.auctionId());
@@ -27,7 +27,7 @@ public class KafkaReportConsumer {
                 event.auctionId());
     }
 
-    @KafkaListener(topics = "reviews.report.message.approved")
+    @KafkaListener(topics = "reviews.report.qa-approved")
     public void consumeMessageReportApproved(MessageReportApproved event) {
         log.info("Evento MessageReportApproved recebido do Kafka. messageId={}",
                 event.messageId());
