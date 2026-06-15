@@ -14,7 +14,6 @@ import java.util.UUID;
 @Getter
 @Setter
 public class MessageReport {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
