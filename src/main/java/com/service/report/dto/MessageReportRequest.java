@@ -1,9 +1,9 @@
-package com.service.report.kafka.events;
+package com.service.report.dto;
 
 import java.time.Instant;
 import java.util.UUID;
 
-public record MessageReportedPendingReview(
+public record MessageReportRequest(
         UUID userId,
         Long auctionId,
         UUID sellerId,
@@ -12,5 +12,5 @@ public record MessageReportedPendingReview(
         String reportReason,
         Instant ocurredAt,
         UUID correlationId
-) implements ReportEvent {
+) {
 }

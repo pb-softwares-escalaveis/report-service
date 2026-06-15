@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.Instant;
+import java.util.UUID;
 
 @Entity
 @Table(name = "message_report")
@@ -13,17 +14,18 @@ import java.time.Instant;
 @Getter
 @Setter
 public class MessageReport {
+
     @Id
-    @GeneratedValue(stategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, name = "message_id")
     private Long messageId;
 
-    @Column(nullable = false, name = "seller_id")
-    private Long userId;
+    @Column(nullable = false, name = "user_id")
+    private UUID userId;
 
-    @Column(nullable = false, name = "report_reason")
+    @Column(nullable = false, name = "report_reason", columnDefinition = "TEXT")
     private String reportReason;
 
     @Column(nullable = false)
@@ -32,7 +34,7 @@ public class MessageReport {
     @Column(nullable = false)
     private Instant creationDate;
 
-    public MessageReport(Long id, Long messageId, Long userId, String reportReason) {
+    public MessageReport(Long id, Long messageId, UUID userId, String reportReason) {
         this.id = id;
         this.messageId = messageId;
         this.userId = userId;
