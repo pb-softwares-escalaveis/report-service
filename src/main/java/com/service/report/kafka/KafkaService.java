@@ -13,9 +13,9 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class KafkaService {
-    @Value("reports.auction.pending.review")
+    @Value("reports.auction.pending-review")
     String AUCTION_REPORTED;
-    @Value("reports.message.pending.review")
+    @Value("reports.qa.pending-review")
     String MESSAGE_REPORTED;
 
     private final KafkaTemplate<String, ReportEvent> kafkaTemplate;
