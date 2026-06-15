@@ -1,3 +1,71 @@
+server:
+  port: 8081
+
 spring:
   application:
     name: report
+  profiles:
+    active: dev
+
+  datasource:
+    url: jdbc:postgresql://localhost:5433/report
+    username: report
+    password: report
+    driver-class-name: org.postgresql.Driver
+
+  sql:
+    init:
+      mode: always
+
+  jpa:
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: report-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+        spring.json.add.type.headers: false
+        spring.json.use.type.headers: false
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+resilience4j:
+  retry:
+    instances:
+      geminiReviewService:
+        max-attempts: 3
+        wait-duration: 2s
+        retry-exceptions:
+#          - com.service.report.exception.ReviewProviderException
+          - java.io.IOException
+          - java.net.SocketTimeoutException
+  circuitbreaker:
+    instances:
+      geminiReviewService:
+        sliding-window-type: COUNT_BASED
+        sliding-window-size: 10
+        minimum-number-of-calls: 5
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 30s
+        permitted-number-of-calls-in-half-open-state: 2
+        record-exceptions:
+#          - com.service.report.exception.ReviewProviderException
+          - java.io.IOException
+          - java.net.SocketTimeoutException
+
+app:
+  kafka-topics:
+    report:
+      report-auction-report-approved: "report.acution-reported"
+      report-message-report-approved: "report.message-reported"
