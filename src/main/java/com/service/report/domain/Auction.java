@@ -38,7 +38,7 @@ public class Auction {
         this.auctionTitle = auctionTitle;
         this.auctionDescription = auctionDescription;
         this.reportReason = reportReason;
-        this.ocurredAt = occurredAt;
+        this.occurredAt = occurredAt;
         this.auctionThumb = auctionThumb;
         this.correlationId = correlationId;
     }
