@@ -42,7 +42,7 @@ public class AuctionReportService {
                 request.auctionTitle(),
                 request.auctionDescription(),
                 request.reportReason(),
-                request.ocurredAt(),
+                request.occurredAt(),
                 request.auctionThumb(),
                 request.correlationId()
         );
