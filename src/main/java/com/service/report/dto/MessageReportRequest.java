@@ -10,7 +10,7 @@ public record MessageReportRequest(
         Long messageId,
         String message,
         String reportReason,
-        Instant ocurredAt,
+        Instant occurredAt,
         UUID correlationId
 ) {
 }

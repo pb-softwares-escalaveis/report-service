@@ -43,7 +43,7 @@ public class MessageReportService {
                 request.messageId(),
                 request.message(),
                 request.reportReason(),
-                request.ocurredAt(),
+                request.occurredAt(),
                 request.correlationId()
         );
 

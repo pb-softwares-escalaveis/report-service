@@ -6,7 +6,7 @@ import java.util.UUID;
 public record AuctionReportApproved(
         Long auctionId,
         UUID sellerId,
-        Instant ocurredAt,
+        Instant occurredAt,
         UUID correlationId
 ) implements ReportEvent {
 }

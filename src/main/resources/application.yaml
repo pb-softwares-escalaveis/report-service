@@ -1,5 +1,5 @@
 server:
-  port: 8081
+  port: 8083
 
 spring:
   application:
@@ -8,7 +8,7 @@ spring:
     active: dev
 
   datasource:
-    url: jdbc:postgresql://localhost:5434/report
+    url: jdbc:postgresql://localhost:5436/report
     username: report
     password: report
     driver-class-name: org.postgresql.Driver

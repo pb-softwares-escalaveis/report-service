@@ -7,7 +7,7 @@ public record MessageReportApproved(
         Long auctionId,
         UUID sellerId,
         Long messageId,
-        Instant ocurredAt,
+        Instant occurredAt,
         UUID correlationId
 ) implements ReportEvent {
 }
