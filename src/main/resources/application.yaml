@@ -66,4 +66,4 @@ app:
   kafka-topics:
     reports:
       auction-pending-review: "reports.auction.pending.review"
-      message-pending-review: "reports.qa.pending.review"
+      qa-pending-review: "reports.qa.pending.review"
