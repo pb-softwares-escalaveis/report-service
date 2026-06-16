@@ -1,7 +1,7 @@
 package com.service.report.kafka;
 
-import com.service.report.kafka.events.AuctionReportedPendingReview;
-import com.service.report.kafka.events.MessageReportedPendingReview;
+import com.service.report.kafka.events.AuctionReported;
+import com.service.report.kafka.events.MessageReported;
 import com.service.report.kafka.events.ReportEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,8 +24,8 @@ public class KafkaService {
         String kafkaKey = event.auctionId().toString();
 
         String topic = switch (event) {
-            case AuctionReportedPendingReview ignored -> AUCTION_REPORTED;
-            case MessageReportedPendingReview ignored -> MESSAGE_REPORTED;
+            case AuctionReported ignored -> AUCTION_REPORTED;
+            case MessageReported ignored -> MESSAGE_REPORTED;
             default -> throw new IllegalArgumentException(
                     "Evento não mapeado para envio: " + event.getClass().getSimpleName());
         };

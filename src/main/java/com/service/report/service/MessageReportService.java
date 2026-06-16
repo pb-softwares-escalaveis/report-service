@@ -3,8 +3,7 @@ package com.service.report.service;
 import com.service.report.domain.MessageReport;
 import com.service.report.dto.MessageReportRequest;
 import com.service.report.kafka.KafkaService;
-import com.service.report.kafka.events.MessageReportApproved;
-import com.service.report.kafka.events.MessageReportedPendingReview;
+import com.service.report.kafka.events.MessageReported;
 import com.service.report.repository.MessageReportRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -36,10 +35,10 @@ public class MessageReportService {
         log.info("Report de mensagem persistido com sucesso. reportId={} | messageId={} | auctionId={}",
                 saved.getId(), request.messageId(), request.auctionId());
 
-        MessageReportedPendingReview event = new MessageReportedPendingReview(
+        MessageReported event = new MessageReported(
                 request.userId(),
-                request.auctionId(),
                 request.sellerId(),
+                request.auctionId(),
                 request.messageId(),
                 request.message(),
                 request.reportReason(),
@@ -58,15 +57,15 @@ public class MessageReportService {
         return saved;
     }
 
-    public MessageReport setMessageReportApproved(MessageReportApproved messageReportApproved) {
+    public MessageReport setMessageReportApproved(MessageReported MessageReported) {
         log.info("Processando aprovação de report de mensagem. messageId={}",
-                messageReportApproved.messageId());
+                MessageReported.messageId());
 
-        MessageReport report = messageReportRepository.findById(messageReportApproved.messageId())
+        MessageReport report = messageReportRepository.findById(MessageReported.messageId())
                 .orElseThrow(() -> {
-                    log.error("MessageReport não encontrado. messageId={}", messageReportApproved.messageId());
+                    log.error("MessageReport não encontrado. messageId={}", MessageReported.messageId());
                     return new EntityNotFoundException(
-                            "MessageReport not found for messageId: " + messageReportApproved.messageId()
+                            "MessageReport not found for messageId: " + MessageReported.messageId()
                     );
                 });
 
@@ -74,7 +73,7 @@ public class MessageReportService {
 
         MessageReport saved = messageReportRepository.save(report);
         log.info("Report de mensagem marcado como aprovado com sucesso. reportId={} | messageId={}",
-                saved.getId(), messageReportApproved.messageId());
+                saved.getId(), MessageReported.messageId());
 
         return saved;
     }

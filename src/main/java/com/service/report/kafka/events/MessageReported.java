@@ -3,15 +3,14 @@ package com.service.report.kafka.events;
 import java.time.Instant;
 import java.util.UUID;
 
-public record AuctionReportedPendingReview(
+public record MessageReported(
         UUID userId,
-        Long auctionId,
         UUID sellerId,
-        String auctionTitle,
-        String auctionDescription,
+        Long auctionId,
+        Long messageId,
+        String message,
         String reportReason,
         Instant occurredAt,
-        String auctionThumb,
         UUID correlationId
 ) implements ReportEvent {
 }

@@ -1,7 +1,7 @@
 package com.service.report.kafka.consumer;
 
-import com.service.report.kafka.events.AuctionReportApproved;
-import com.service.report.kafka.events.MessageReportApproved;
+import com.service.report.kafka.events.AuctionReported;
+import com.service.report.kafka.events.MessageReported;
 import com.service.report.service.AuctionReportService;
 import com.service.report.service.MessageReportService;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ public class KafkaReportConsumer {
     private final MessageReportService messageReportService;
 
     @KafkaListener(topics = "reviews.report.auction-approved")
-    public void consumeAuctionReportApproved(AuctionReportApproved event) {
+    public void consumeAuctionReportApproved(AuctionReported event) {
         log.info("Evento AuctionReportApproved recebido do Kafka. auctionId={}",
                 event.auctionId());
 
@@ -28,7 +28,7 @@ public class KafkaReportConsumer {
     }
 
     @KafkaListener(topics = "reviews.report.qa-approved")
-    public void consumeMessageReportApproved(MessageReportApproved event) {
+    public void consumeMessageReportApproved(MessageReported event) {
         log.info("Evento MessageReportApproved recebido do Kafka. messageId={}",
                 event.messageId());
 

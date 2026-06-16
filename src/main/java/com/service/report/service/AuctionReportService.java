@@ -3,8 +3,7 @@ package com.service.report.service;
 import com.service.report.domain.AuctionReport;
 import com.service.report.dto.AuctionReportRequest;
 import com.service.report.kafka.KafkaService;
-import com.service.report.kafka.events.AuctionReportApproved;
-import com.service.report.kafka.events.AuctionReportedPendingReview;
+import com.service.report.kafka.events.AuctionReported;
 import com.service.report.repository.AuctionReportRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +34,7 @@ public class AuctionReportService {
         log.info("Report de leilão persistido com sucesso. reportId={} | auctionId={} | sellerId={}",
                 saved.getId(), request.auctionId(), request.sellerId());
 
-        AuctionReportedPendingReview event = new AuctionReportedPendingReview(
+        AuctionReported event = new AuctionReported(
                 request.userId(),
                 request.auctionId(),
                 request.sellerId(),
@@ -58,15 +57,15 @@ public class AuctionReportService {
         return saved;
     }
 
-    public AuctionReport setAuctionReportApproved(AuctionReportApproved auctionReportApproved) {
+    public AuctionReport setAuctionReportApproved(AuctionReported AuctionReported) {
         log.info("Processando aprovação de report de leilão. auctionId={}",
-                auctionReportApproved.auctionId());
+                AuctionReported.auctionId());
 
-        AuctionReport report = auctionReportRepository.findById(auctionReportApproved.auctionId())
+        AuctionReport report = auctionReportRepository.findById(AuctionReported.auctionId())
                 .orElseThrow(() -> {
-                    log.error("AuctionReport não encontrado. auctionId={}", auctionReportApproved.auctionId());
+                    log.error("AuctionReport não encontrado. auctionId={}", AuctionReported.auctionId());
                     return new EntityNotFoundException(
-                            "AuctionReport not found for auctionId: " + auctionReportApproved.auctionId()
+                            "AuctionReport not found for auctionId: " + AuctionReported.auctionId()
                     );
                 });
 
@@ -74,7 +73,7 @@ public class AuctionReportService {
 
         AuctionReport saved = auctionReportRepository.save(report);
         log.info("Report de leilão marcado como aprovado com sucesso. reportId={} | auctionId={}",
-                saved.getId(), auctionReportApproved.auctionId());
+                saved.getId(), AuctionReported.auctionId());
 
         return saved;
     }
