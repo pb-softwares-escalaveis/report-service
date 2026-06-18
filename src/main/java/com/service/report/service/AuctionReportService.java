@@ -2,10 +2,11 @@ package com.service.report.service;
 
 import com.service.report.domain.AuctionReport;
 import com.service.report.dto.AuctionReportRequest;
+import com.service.report.exception.InvalidReportRequestException;
+import com.service.report.exception.ReportNotFoundException;
 import com.service.report.kafka.KafkaService;
 import com.service.report.kafka.events.AuctionReported;
 import com.service.report.repository.AuctionReportRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,8 @@ public class AuctionReportService {
 
     @Transactional
     public AuctionReport reportAuction(AuctionReportRequest request) {
+        validateRequest(request);
+
         log.info("Iniciando report de leilão. auctionId={} | sellerId={} | userId={}",
                 request.auctionId(), request.sellerId(), request.userId());
 
@@ -67,7 +70,7 @@ public class AuctionReportService {
         AuctionReport report = auctionReportRepository.findById(AuctionReported.auctionId())
                 .orElseThrow(() -> {
                     log.error("AuctionReport não encontrado. auctionId={}", AuctionReported.auctionId());
-                    return new EntityNotFoundException(
+                    return new ReportNotFoundException(
                             "AuctionReport not found for auctionId: " + AuctionReported.auctionId()
                     );
                 });
@@ -79,5 +82,23 @@ public class AuctionReportService {
                 saved.getId(), AuctionReported.auctionId());
 
         return saved;
+    }
+
+    private void validateRequest(AuctionReportRequest request) {
+        if (request == null) {
+            throw new InvalidReportRequestException("Auction report request is required");
+        }
+        if (request.userId() == null) {
+            throw new InvalidReportRequestException("userId is required");
+        }
+        if (request.auctionId() == null) {
+            throw new InvalidReportRequestException("auctionId is required");
+        }
+        if (request.sellerId() == null) {
+            throw new InvalidReportRequestException("sellerId is required");
+        }
+        if (request.reportReason() == null || request.reportReason().isBlank()) {
+            throw new InvalidReportRequestException("reportReason is required");
+        }
     }
 }

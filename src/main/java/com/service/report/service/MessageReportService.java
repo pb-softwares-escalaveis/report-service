@@ -2,10 +2,11 @@ package com.service.report.service;
 
 import com.service.report.domain.MessageReport;
 import com.service.report.dto.MessageReportRequest;
+import com.service.report.exception.InvalidReportRequestException;
+import com.service.report.exception.ReportNotFoundException;
 import com.service.report.kafka.KafkaService;
 import com.service.report.kafka.events.MessageReported;
 import com.service.report.repository.MessageReportRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,8 @@ public class MessageReportService {
 
     @Transactional
     public MessageReport reportMessage(MessageReportRequest request) {
+        validateRequest(request);
+
         log.info("Iniciando report de mensagem. messageId={} | auctionId={} | sellerId={} | userId={}",
                 request.messageId(), request.auctionId(), request.sellerId(), request.userId());
 
@@ -67,7 +70,7 @@ public class MessageReportService {
         MessageReport report = messageReportRepository.findById(MessageReported.messageId())
                 .orElseThrow(() -> {
                     log.error("MessageReport não encontrado. messageId={}", MessageReported.messageId());
-                    return new EntityNotFoundException(
+                    return new ReportNotFoundException(
                             "MessageReport not found for messageId: " + MessageReported.messageId()
                     );
                 });
@@ -79,5 +82,26 @@ public class MessageReportService {
                 saved.getId(), MessageReported.messageId());
 
         return saved;
+    }
+
+    private void validateRequest(MessageReportRequest request) {
+        if (request == null) {
+            throw new InvalidReportRequestException("Message report request is required");
+        }
+        if (request.userId() == null) {
+            throw new InvalidReportRequestException("userId is required");
+        }
+        if (request.auctionId() == null) {
+            throw new InvalidReportRequestException("auctionId is required");
+        }
+        if (request.sellerId() == null) {
+            throw new InvalidReportRequestException("sellerId is required");
+        }
+        if (request.messageId() == null) {
+            throw new InvalidReportRequestException("messageId is required");
+        }
+        if (request.reportReason() == null || request.reportReason().isBlank()) {
+            throw new InvalidReportRequestException("reportReason is required");
+        }
     }
 }

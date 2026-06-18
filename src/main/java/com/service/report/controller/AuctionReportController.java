@@ -2,6 +2,7 @@ package com.service.report.controller;
 
 import com.service.report.domain.AuctionReport;
 import com.service.report.dto.AuctionReportRequest;
+import com.service.report.exception.InvalidReportRequestException;
 import com.service.report.service.AuctionReportService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,10 @@ public class AuctionReportController {
 
     @PostMapping
     public ResponseEntity<AuctionReport> save(@RequestBody AuctionReportRequest request) {
+        if (request == null) {
+            throw new InvalidReportRequestException("Auction report request is required");
+        }
+
         log.info("Recebendo requisição de report de leilão. auctionId={} | sellerId={} | userId={}",
                 request.auctionId(), request.sellerId(), request.userId());
 

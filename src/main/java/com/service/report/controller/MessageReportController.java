@@ -2,6 +2,7 @@ package com.service.report.controller;
 
 import com.service.report.domain.MessageReport;
 import com.service.report.dto.MessageReportRequest;
+import com.service.report.exception.InvalidReportRequestException;
 import com.service.report.service.MessageReportService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,10 @@ public class MessageReportController {
 
     @PostMapping
     public ResponseEntity<MessageReport> save(@RequestBody MessageReportRequest request) {
+        if (request == null) {
+            throw new InvalidReportRequestException("Message report request is required");
+        }
+
         log.info("Recebendo requisição de report de mensagem. messageId={} | auctionId={} | sellerId={} | userId={}",
                 request.messageId(), request.auctionId(), request.sellerId(), request.userId());
 
