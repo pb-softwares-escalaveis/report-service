@@ -1,5 +1,5 @@
 server:
-  port: 8081
+  port: ${REPORT_SERVICE_PORT:8081}
 
 spring:
   application:
@@ -8,9 +8,9 @@ spring:
     active: dev
 
   datasource:
-    url: jdbc:postgresql://localhost:5434/report
-    username: report
-    password: report
+    url: ${REPORT_SERVICE_DB_HOST:jdbc:postgresql://localhost:5434/report}
+    username: ${REPORT_SERVICE_DB_USER:report}
+    password: ${REPORT_SERVICE_DB_PASSWORD:report}
     driver-class-name: org.postgresql.Driver
 
   sql:
@@ -27,7 +27,7 @@ spring:
     open-in-view: false
 
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: ${REPORT_SERVICE_KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
     consumer:
       group-id: report-group
       auto-offset-reset: earliest
@@ -41,6 +41,35 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: false
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+    prefer-ip-address: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info"
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: always
+      show-components: always
+  info:
+    env:
+      enabled: true
+
+info:
+  app:
+    name: ${spring.application.name}
+    version: 1.0.0
+    description: Report Service do O Leiloeiro Online
 
 app:
   kafka-topics:

@@ -1,15 +1,15 @@
 services:
-  postgres:
+  report-service-postgres:
     image: postgres:15-alpine
-    container_name: report-postgres
+    container_name: report-service-postgres
     ports:
-      - "5434:5432"
+      - "${REPORT_SERVICE_DB_PORT:-5434}:5432"
     environment:
-      POSTGRES_DB: report
-      POSTGRES_USER: report
-      POSTGRES_PASSWORD: report
+      POSTGRES_DB: ${REPORT_SERVICE_DB_NAME:-report}
+      POSTGRES_USER: ${REPORT_SERVICE_DB_USER:-report}
+      POSTGRES_PASSWORD: ${REPORT_SERVICE_DB_PASSWORD:-report}
     volumes:
-      - report-postgres-data:/var/lib/postgresql/data
+      - report-service-postgres-data:/var/lib/postgresql/data
 
 volumes:
-  report-postgres-data:
+  report-service-postgres-data:
