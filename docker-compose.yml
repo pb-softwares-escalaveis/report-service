@@ -1,7 +1,8 @@
 services:
   report-service:
-    build: .
     container_name: report-service
+    image: gabrielmeruzzi/report-service:latest
+    restart: always
     ports:
       - "${REPORT_SERVICE_PORT:-8081}:8081"
     environment:
@@ -10,6 +11,8 @@ services:
       REPORT_SERVICE_DB_USER: ${REPORT_SERVICE_DB_USER:-report}
       REPORT_SERVICE_DB_PASSWORD: ${REPORT_SERVICE_DB_PASSWORD:-report}
       REPORT_SERVICE_KAFKA_BOOTSTRAP_SERVERS: ${REPORT_SERVICE_KAFKA_BOOTSTRAP_SERVERS:-localhost:9092}
+    networks:
+      - leilao-network
     depends_on:
       report-service-postgres:
         condition: service_healthy
@@ -26,11 +29,17 @@ services:
     volumes:
       - report-service-postgres-data:/var/lib/postgresql/data
       - ./src/main/resources/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    networks:
+      - leilao-network
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB" ]
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
       interval: 5s
       timeout: 5s
       retries: 10
+
+networks:
+  leilao-network:
+    external: true
 
 volumes:
   report-service-postgres-data:
