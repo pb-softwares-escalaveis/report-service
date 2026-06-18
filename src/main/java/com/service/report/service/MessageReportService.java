@@ -11,6 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
+import java.util.UUID;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -42,12 +45,12 @@ public class MessageReportService {
                 request.messageId(),
                 request.message(),
                 request.reportReason(),
-                request.occurredAt(),
-                request.correlationId()
+                Instant.now(),
+                UUID.randomUUID()
         );
 
         log.debug("Publicando evento MessageReportedPendingReview no Kafka. messageId={} | auctionId={} | correlationId={}",
-                request.messageId(), request.auctionId(), request.correlationId());
+                request.messageId(), request.auctionId(), event.correlationId());
 
         kafkaService.sendEvent(event);
 

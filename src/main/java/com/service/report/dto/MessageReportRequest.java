@@ -1,6 +1,5 @@
 package com.service.report.dto;
 
-import java.time.Instant;
 import java.util.UUID;
 
 public record MessageReportRequest(
@@ -9,8 +8,6 @@ public record MessageReportRequest(
         UUID sellerId,
         Long messageId,
         String message,
-        String reportReason,
-        Instant occurredAt,
-        UUID correlationId
+        String reportReason
 ) {
 }
