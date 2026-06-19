@@ -1,14 +1,14 @@
 server:
-  port: ${REPORT_SERVICE_PORT:8081}
+  port: ${REPORT_SERVICE_PORT}
 
 spring:
   application:
-    name: report
+    name: report-service
   profiles:
     active: dev
 
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5434/report}
+    url: ${REPORT_SERVICE_DATASOURCE_URL:jdbc:postgresql://localhost:5434/report}
     username: ${REPORT_SERVICE_DB_USER:report}
     password: ${REPORT_SERVICE_DB_PASSWORD:report}
     driver-class-name: org.postgresql.Driver
