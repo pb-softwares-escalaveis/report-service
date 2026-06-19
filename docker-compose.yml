@@ -7,10 +7,10 @@ services:
       - "${REPORT_SERVICE_PORT:-8081}:8081"
     environment:
       REPORT_SERVICE_PORT: ${REPORT_SERVICE_PORT:-8081}
-      REPORT_SERVICE_DB_HOST: jdbc:postgresql://report-service-postgres:5432/${REPORT_SERVICE_DB_NAME:-report}
+      SPRING_DATASOURCE_URL: "${SPRING_DATASOURCE_URL:-jdbc:postgresql://report-service-postgres:5432/report}"
       REPORT_SERVICE_DB_USER: ${REPORT_SERVICE_DB_USER:-report}
       REPORT_SERVICE_DB_PASSWORD: ${REPORT_SERVICE_DB_PASSWORD:-report}
-      REPORT_SERVICE_KAFKA_BOOTSTRAP_SERVERS: ${REPORT_SERVICE_KAFKA_BOOTSTRAP_SERVERS:-localhost:9092}
+      KAFKA_SERVERS: "${KAFKA_SERVERS:-localhost:9092}"
     networks:
       - leilao-network
     depends_on:
@@ -23,7 +23,7 @@ services:
     ports:
       - "${REPORT_SERVICE_DB_PORT:-5434}:5432"
     environment:
-      POSTGRES_DB: ${REPORT_SERVICE_DB_NAME:-report}
+      POSTGRES_DB: report
       POSTGRES_USER: ${REPORT_SERVICE_DB_USER:-report}
       POSTGRES_PASSWORD: ${REPORT_SERVICE_DB_PASSWORD:-report}
     volumes:

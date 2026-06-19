@@ -8,7 +8,7 @@ spring:
     active: dev
 
   datasource:
-    url: ${REPORT_SERVICE_DB_HOST:jdbc:postgresql://localhost:5434/report}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5434/report}
     username: ${REPORT_SERVICE_DB_USER:report}
     password: ${REPORT_SERVICE_DB_PASSWORD:report}
     driver-class-name: org.postgresql.Driver
@@ -27,7 +27,7 @@ spring:
     open-in-view: false
 
   kafka:
-    bootstrap-servers: ${REPORT_SERVICE_KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    bootstrap-servers: ${KAFKA_SERVERS:localhost:9092}
     consumer:
       group-id: report-group
       auto-offset-reset: earliest
