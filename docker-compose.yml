@@ -1,7 +1,7 @@
 services:
   report-service:
     container_name: report-service
-    image: gabrielmeruzzi/report-service:latest
+    image: pedrovncs/report-service:latest
     restart: always
     ports:
       - "${REPORT_SERVICE_PORT:-8081}:8081"
